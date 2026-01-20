@@ -1025,9 +1025,9 @@
     <h2 class="title is-4">Emergent Depth</h2>
     <div class="content has-text-justified">
       <p>
-        Our RayRoPE positional encoding enables models to learn depth understanding implicitly. 
-        The visualizations below demonstrate how depth information emerges naturally during training,
-        showing comparisons between input views and predicted depth maps across different scenes.
+        RayRoPE predicts depth and uncertainties which are used to compute the positional encodings. 
+        Even without depth supervision during training, resonable depth predictions emerge, especially 
+        in the later layers. Depth prediction accuracy and the predicted uncertainties are inversely correlated.
       </p>
     </div>
 
