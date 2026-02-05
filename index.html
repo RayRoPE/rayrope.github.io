@@ -694,7 +694,7 @@
 <!-- Section 1: Problem -->
 <section class="section" id="problem">
   <div class="container is-max-desktop">
-    <h2 class="title is-4">Problem: How should we design positional encoding for multi-view transformers?</h2>
+    <h2 class="title is-4">How should we design positional encoding for multi-view transformers?</h2>
     
     <div class="content has-text-justified" style="margin-bottom: 1.5rem;">
       <p>
@@ -706,13 +706,21 @@
 
     <!-- Two-row figure: Row 1 shows 1D/2D/3D/Multi-view models, Row 2 shows corresponding RoPE variants -->
     <div class="content has-text-centered">
-      <!-- Placeholder - remove when image is ready -->
-      <!-- <div class="image-placeholder" style="min-height: 300px; max-width: 100%; margin: 0 auto;">
-        <span>Figure: Two-row comparison (1D/2D/3D/Multi-view models → 1D/2D/3D RoPE + RayRoPE)</span>
-      </div> -->
-      
-      <img src="./assets/web-problem.png" alt="Two-row figure comparing different models and their positional encodings" style="width: 100%; border-radius: 8px;" />
-     
+      <div class="custom-video-container">
+        <video id="teaser-video" autoplay muted playsinline preload="metadata" data-src="./assets/web-teaser.mp4">
+          <source type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="video-controls">
+          <button class="play-pause-btn" id="teaser-play-pause-btn">
+            <i class="fas fa-pause"></i>
+          </button>
+          <div class="progress-container" id="teaser-progress-container">
+            <div class="progress-bar" id="teaser-progress-bar"></div>
+          </div>
+          <span class="time-display" id="teaser-time-display">0:00 / 0:00</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1341,6 +1349,170 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- Custom Video Player Controls -->
+<script>
+// Generic video player setup function
+function setupVideoPlayer(videoId, playPauseBtnId, progressContainerId, progressBarId, timeDisplayId, options = {}) {
+  const video = document.getElementById(videoId);
+  const playPauseBtn = document.getElementById(playPauseBtnId);
+  const progressContainer = document.getElementById(progressContainerId);
+  const progressBar = document.getElementById(progressBarId);
+  const timeDisplay = document.getElementById(timeDisplayId);
+
+  if (!video || !playPauseBtn || !progressContainer || !progressBar || !timeDisplay) return;
+
+  // Format time as M:SS
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  // Update play/pause button icon
+  function updatePlayPauseIcon() {
+    const icon = playPauseBtn.querySelector('i');
+    if (video.paused) {
+      icon.classList.remove('fa-pause');
+      icon.classList.add('fa-play');
+    } else {
+      icon.classList.remove('fa-play');
+      icon.classList.add('fa-pause');
+    }
+  }
+
+  // Update progress bar and time display
+  function updateProgress() {
+    if (video.duration) {
+      const percent = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = percent + '%';
+      timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+    }
+  }
+
+  // Play/Pause toggle
+  playPauseBtn.addEventListener('click', function() {
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  });
+
+  // Drag to seek
+  let isDragging = false;
+
+  function seek(e) {
+    if (!video.duration) return;
+    const rect = progressContainer.getBoundingClientRect();
+    let percent = (e.clientX - rect.left) / rect.width;
+    percent = Math.max(0, Math.min(1, percent));
+    video.currentTime = percent * video.duration;
+    updateProgress();
+  }
+
+  progressContainer.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    isDragging = true;
+    progressContainer.classList.add('dragging');
+    seek(e);
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (isDragging) {
+      e.preventDefault();
+      seek(e);
+    }
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (isDragging) {
+      isDragging = false;
+      progressContainer.classList.remove('dragging');
+    }
+  });
+
+  // Touch events for mobile
+  function seekTouch(touch) {
+    if (!video.duration) return;
+    const rect = progressContainer.getBoundingClientRect();
+    let percent = (touch.clientX - rect.left) / rect.width;
+    percent = Math.max(0, Math.min(1, percent));
+    video.currentTime = percent * video.duration;
+    updateProgress();
+  }
+
+  progressContainer.addEventListener('touchstart', function(e) {
+    isDragging = true;
+    progressContainer.classList.add('dragging');
+    const touch = e.touches[0];
+    seekTouch(touch);
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e) {
+    if (isDragging) {
+      const touch = e.touches[0];
+      seekTouch(touch);
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', function() {
+    if (isDragging) {
+      isDragging = false;
+      progressContainer.classList.remove('dragging');
+    }
+  });
+
+  // Event listeners for video
+  video.addEventListener('timeupdate', updateProgress);
+  video.addEventListener('play', updatePlayPauseIcon);
+  video.addEventListener('pause', updatePlayPauseIcon);
+  video.addEventListener('loadedmetadata', function() {
+    timeDisplay.textContent = `${formatTime(0)} / ${formatTime(video.duration)}`;
+  });
+
+  // Handle video end - stay at last frame
+  if (options.pauseOnEnd) {
+    video.addEventListener('ended', function() {
+      video.pause();
+      updatePlayPauseIcon();
+    });
+  }
+
+  function ensureVideoLoaded() {
+    const dataSrc = video.getAttribute('data-src');
+    if (dataSrc && !video.getAttribute('src')) {
+      video.setAttribute('src', dataSrc);
+      video.load();
+    }
+  }
+
+  // Initialize
+  updatePlayPauseIcon();
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          ensureVideoLoaded();
+          observer.disconnect();
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    observer.observe(video);
+  } else {
+    ensureVideoLoaded();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Setup teaser video (pause on end to stay at last frame)
+  setupVideoPlayer('teaser-video', 'teaser-play-pause-btn', 'teaser-progress-container', 'teaser-progress-bar', 'teaser-time-display', { pauseOnEnd: true });
+
+  // Setup method video
+  setupVideoPlayer('method-video', 'play-pause-btn', 'progress-container', 'progress-bar', 'time-display', { pauseOnEnd: false });
+});
+</script>
+
+<!-- Legacy Video Player Controls (kept for compatibility) -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const video = document.getElementById('method-video');
