@@ -10,7 +10,82 @@ from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from torchmetrics.functional import peak_signal_noise_ratio
 from tqdm import tqdm
 
+'''
+PICKED_SCENES = {
+    "re10k": [
+        # ('040a26b288e7bda4', 1),
+        # ('02ee66b3efbf3b0a', 1),
+        # ('01a2277ee817b310', 1),
+        # ('002ae53df0e0afe2', 1),
+        # ('02ee66b3efbf3b0a', 1),
+        # ('01a5cc3805e94c21', 2),
+        # above: dep index
+        ('0131c9aed0fb3940', 1),
+        ('040a26b288e7bda4', 1),
+        ('04e2be0415136fa9', 0),
+        ('03a78406de1d0993', 1),
+        ('0068e97c1c1f61aa', 0),
+        ('040895d45bf4e580', 0),
 
+
+
+    ],
+    "objaverse": [
+        # radial
+        ('015c200ce786438c8e35ddf635d1e236', 4),
+        ('03c0260373c7406ea408c2dec9f8d502', 4),
+        ('047ca62b79d140d4b64044db311561d9', 8),
+        # spherical
+        ('035d9ce9964b42f6bc20514853934d1b', 0),
+        ('0050f76a07fa43b7a38e6cef40beb69d', 2),
+        ('03e4ff99ecc24e5f8ea49d4e8df876e8', 2),
+        # ('006373e3885b472cb5538fc570235fcf', 8),
+        
+    ],
+    "co3d_seen": [
+        # 2 views for figure
+        ('212_22443_46420', 0),
+        # ('12_104_640', 1),
+        ('191_20615_38267', 2),
+        ('184_19904_39401', 1),
+        ('256_27647_53803', 0),
+        ('223_23574_49752', 0),
+        ('201_21573_40063', 0),
+
+        # 4 views for video
+        # ('256_27676_55062', 2),
+        # ('118_13853_28129', 0),
+        # ('112_13308_25702', 0),
+        # ('187_20181_35751', 2),
+        # ('164_17988_33493', 3),
+        # ('250_26773_54489', 1),
+        # ('222_23409_48576', 3),
+    ],
+    "mixed": {
+        "co3d_seen": [
+            
+            ('256_27676_55062', 1),
+            ('118_13853_28129', 0),
+        ],
+        "re10k": [
+            # ('04e2be0415136fa9', 1),
+            # ('03a78406de1d0993', 2),
+            # above: dep index
+            ('002ae53df0e0afe2', 1),
+            ('02ee66b3efbf3b0a', 1),
+            
+
+
+
+        ],
+        "objaverse": [
+            ('02ca74ef6a1b4ec386c11048603f0e98', 4),
+            ('002aec05c41342dea61828f67d340d2d', 8)
+        ],
+    }
+}
+
+'''
 PICKED_SCENES = {
     "re10k": [
         ('04e2be0415136fa9', 1),

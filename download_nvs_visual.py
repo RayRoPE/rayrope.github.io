@@ -15,7 +15,7 @@ REMOTE_HOST = "grogu.ri.cmu.edu"
 REMOTE_SERVER = f"{REMOTE_USER}@{REMOTE_HOST}"
 
 # Remote paths (from create_vis_comp.py)
-LOG_ROOT = "/grogu/user/yuwu3/rayrope_log_Dec/"
+LOG_ROOT = "/grogu/user/yuwu3/rayrope_log_Feb/"
 MODEL_DIR = "L6-H8-D1152-FF1024-B8"
 
 # Local output directory
@@ -38,13 +38,22 @@ DATASET_INPUT_VIEWS = {
 
 PICKED_SCENES = {
     "re10k": [
-        ('04e2be0415136fa9', 1),
-        ('03a78406de1d0993', 2),
-        ('040a26b288e7bda4', 1),
-        ('02ee66b3efbf3b0a', 1),
-        ('01a2277ee817b310', 1),
         ('002ae53df0e0afe2', 1),
-        ('01a5cc3805e94c21', 2),
+        ('02ee66b3efbf3b0a', 1),
+        ('0131c9aed0fb3940', 1),
+        ('040a26b288e7bda4', 1),
+        ('04e2be0415136fa9', 0),
+        ('03a78406de1d0993', 1),
+        ('0068e97c1c1f61aa', 0),
+        ('040895d45bf4e580', 0),
+
+        # ('04e2be0415136fa9', 1),
+        # ('03a78406de1d0993', 2),
+        # ('040a26b288e7bda4', 1),
+        # ('02ee66b3efbf3b0a', 1),
+        # ('01a2277ee817b310', 1),
+        # ('002ae53df0e0afe2', 1),
+        # ('01a5cc3805e94c21', 2),
     ],
     "objaverse": [
         # radial
